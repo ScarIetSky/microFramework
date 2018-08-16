@@ -1,0 +1,33 @@
+{
+    "name": "andrey/framework",
+    "description": "test framework",
+    "authors": [
+        {
+            "name": "ScarIetSky",
+            "email": "shugobomber@mail.ru"
+        }
+    ],
+    "config": {
+        "soft-packages": true
+    },
+    "require": {
+        "php": ">=7.2.0",
+        "psr/http-message": "^1.0",
+        "zendframework/zend-diactoros": "^1.8",
+        "aura/router": "^3.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "src/Framework",
+            "App\\": "src/App",
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "serve": "php -S 0.0.0.0:8000 -t public public/index.php",
+        "test": "phpunit --colors=always"
+    }
+}
