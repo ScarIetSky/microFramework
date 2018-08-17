@@ -14,7 +14,11 @@
         "php": ">=7.2.0",
         "psr/http-message": "^1.0",
         "zendframework/zend-diactoros": "^1.8",
-        "aura/router": "^3.1"
+        "aura/router": "^3.1",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "zendframework/zend-stratigility": "2.1",
+        "http-interop/http-middleware": "2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.3"

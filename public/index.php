@@ -1,47 +1,53 @@
 <?php
 
-use Zend\Diactoros\ServerRequestFactory;
+use App\Http\Action;
+use App\Http\Middleware;
+use Framework\Http\Application;
+use Framework\Http\Pipeline\MiddlewareResolver;
+use Framework\Http\Router\AuraRouterAdapter;
+use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\SapiEmitter;
+use Zend\Diactoros\ServerRequestFactory;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
 
 ### Initialization
 
-$aura = new \Aura\Router\RouterContainer();
+$params = [
+    'debug' => true,
+    'users' => ['admin' => 'password'],
+];
+
+$aura = new Aura\Router\RouterContainer();
 $routes = $aura->getMap();
 
-$routes->get('home', '/', \App\Http\Action\HelloAction::class);
-$routes->get('about', '/about', \App\Http\Action\AboutAction::class);
-$routes->get('blog', '/blog', \App\Http\Action\Blog\IndexAction::class);
-$routes->get('blog_show', '/blog/{id}', \App\Http\Action\Blog\ShowAction::class, ['id' => '\d+']);
-$routes->get('blog_public', '/blog/{id}', \App\Http\Action\Blog\PublicAction::class, ['id' => '\d+']);
+$routes->get('home', '/', Action\HelloAction::class);
+$routes->get('about', '/about', Action\AboutAction::class);
+$routes->get('cabinet', '/cabinet', [
+    new Middleware\BasicAuthMiddleware($params['users']),
+    Action\CabinetAction::class,
+]);
+$routes->get('blog', '/blog', Action\Blog\IndexAction::class);
+$routes->get('blog_show', '/blog/{id}', Action\Blog\ShowAction::class)->tokens(['id' => '\d+']);
 
-$router = new \Framework\Http\Router\AuraRouterAdapter($routes);
-$resolver = new \Framework\Http\Router\ActionResolver();
+$router = new AuraRouterAdapter($aura);
+
+$resolver = new MiddlewareResolver();
+$app = new Application($resolver, new Middleware\NotFoundHandler(), new Response());
+
+$app->pipe(new Middleware\ErrorHandlerMiddleware($params['debug']));
+$app->pipe(Middleware\CredentialsMiddleware::class);
+$app->pipe(Middleware\ProfilerMiddleware::class);
+$app->pipe(new Framework\Http\Middleware\RouteMiddleware($router));
+$app->pipe(new Framework\Http\Middleware\DispatchMiddleware($resolver));
 
 ### Running
 
 $request = ServerRequestFactory::fromGlobals();
+$response = $app->run($request, new Response());
 
-try {
-    $result = $router->match($request);
-
-    foreach ($result->getAttributes() as $attribute => $value) {
-        $request = $request->withAttribute($attribute, $value);
-    }
-
-    $action = $resolver->resolve($result->getHandler());
-    $response = $action($request);
-} catch (\Framework\Http\Router\Exception\RequestNotMatchedException $e) {
-    $response = new \Zend\Diactoros\Response\JsonResponse(['error' => 'Undefined page'], 404);
-}
-
-### PostProcessing
-
-$response = $response->withHeader('X-Develover: Andrey');
-
-## Sending
+### Sending
 
 $emitter = new SapiEmitter();
-$emitter->send($response);
+$emitter->emit($response);

@@ -1,17 +1,18 @@
 <?php
 namespace App\Http\Action\Blog;
 
-use Illuminate\Http\JsonResponse;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Diactoros\Response\JsonResponse;
 
 class ShowAction
 {
-    public function __invoke(ServerRequestInterface $request)
+    public function __invoke(ServerRequestInterface $request, callable $next)
     {
-        $id = $request->getAttributes('id');
+        $id = $request->getAttribute('id');
 
-        if($id > 5) {
-            return new JsonResponse(['error' => 'Undefined page'], 404);
+        if($id > 2) {
+            return $next($request);
         }
 
         return new JsonResponse(['id' => $id, 'title' => 'Post #' . $id]);

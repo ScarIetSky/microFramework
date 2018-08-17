@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Action\Blog;
 
+use Zend\Diactoros\Response\JsonResponse;
+
 class IndexAction
 {
     public function __invoke()
