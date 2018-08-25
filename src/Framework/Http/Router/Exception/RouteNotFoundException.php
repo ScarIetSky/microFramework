@@ -1,6 +1,6 @@
 <?php
-namespace Framework\Http\Router\Exception;
 
+namespace Framework\Http\Router\Exception;
 
 class RouteNotFoundException extends \LogicException
 {
@@ -14,12 +14,12 @@ class RouteNotFoundException extends \LogicException
         $this->params = $params;
     }
 
-    public function getName() :string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getParams() :array
+    public function getParams(): array
     {
         return $this->params;
     }

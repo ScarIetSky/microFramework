@@ -1,7 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 018 18.08.18
- * Time: 19:07
- */
+
+use App\Http\Middleware;
+
+/** @var \Framework\Http\Application $app */
+
+$app->pipe(Framework\Http\Middleware\ErrorHandler\ErrorHandlerMiddleware::class);
+$app->pipe(Middleware\ResponseLoggerMiddleware::class);
+$app->pipe(Middleware\CredentialsMiddleware::class);
+$app->pipe(Middleware\ProfilerMiddleware::class);
+$app->pipe(Framework\Http\Middleware\RouteMiddleware::class);
+
+$app->pipe('cabinet', Middleware\BasicAuthMiddleware::class);
+
+$app->pipe(Framework\Http\Middleware\DispatchMiddleware::class);
+

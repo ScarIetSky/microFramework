@@ -1,4 +1,5 @@
 <?php
+
 namespace Framework\Http\Router\Exception;
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +14,7 @@ class RequestNotMatchedException extends \LogicException
         $this->request = $request;
     }
 
-    public function getRequest() :ServerRequestInterface
+    public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }

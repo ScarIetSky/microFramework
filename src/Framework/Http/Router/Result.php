@@ -6,27 +6,30 @@ class Result
 {
     private $name;
     private $handler;
-    private $attribute;
+    private $attributes;
 
-    public function __construct($name, $handler, array $attribute)
+    public function __construct($name, $handler, array $attributes)
     {
         $this->name = $name;
         $this->handler = $handler;
-        $this->attribute = $attribute;
+        $this->attributes = $attributes;
     }
 
-    public function getName() :string
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @return mixed
+     */
     public function getHandler()
     {
         return $this->handler;
     }
 
-    public function getAttributes() :array
+    public function getAttributes(): array
     {
-        return $this->attribute;
+        return $this->attributes;
     }
 }

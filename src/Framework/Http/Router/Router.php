@@ -6,10 +6,6 @@ use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Framework\Http\Router\Exception\RouteNotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Interface Router
- * @package Framework\Http\Router
- */
 interface Router
 {
     /**
@@ -17,7 +13,7 @@ interface Router
      * @throws RequestNotMatchedException
      * @return Result
      */
-    public function match(ServerRequestInterface $request) : Result;
+    public function match(ServerRequestInterface $request): Result;
 
     /**
      * @param $name
@@ -25,6 +21,10 @@ interface Router
      * @throws RouteNotFoundException
      * @return string
      */
-    public function generate($name, array $params = []) :string;
+    public function generate($name, array $params): string;
 
+    /**
+     * @param RouteData $data
+     */
+    public function addRoute(RouteData $data): void;
 }

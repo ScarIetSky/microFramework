@@ -2,10 +2,7 @@
 
 namespace Framework\Http\Pipeline;
 
-
-use Psr\Log\InvalidArgumentException;
-
-class UnknownMiddlewareTypeException extends  InvalidArgumentException
+class UnknownMiddlewareTypeException extends \InvalidArgumentException
 {
     private $type;
 

@@ -1,37 +1,38 @@
 {
-    "name": "andrey/framework",
-    "description": "test framework",
-    "authors": [
-        {
-            "name": "ScarIetSky",
-            "email": "shugobomber@mail.ru"
-        }
-    ],
     "config": {
-        "soft-packages": true
+        "sort-packages": true
     },
     "require": {
-        "php": ">=7.2.0",
-        "psr/http-message": "^1.0",
-        "zendframework/zend-diactoros": "^1.8",
+        "php": ">=7.1.0",
         "aura/router": "^3.1",
-        "psr/http-server-handler": "^1.0",
+        "monolog/monolog": "^1.23",
+        "psr/container": "^1.0",
+        "psr/http-message": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "zendframework/zend-stratigility": "2.1",
-        "http-interop/http-middleware": "2.1"
+        "psr/log": "^1.0",
+        "twig/twig": "^2.4",
+        "zendframework/zend-config-aggregator": "^1.0",
+        "zendframework/zend-diactoros": "^1.7",
+        "zendframework/zend-servicemanager": "^3.3",
+        "zendframework/zend-stratigility": "^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.3"
+        "filp/whoops": "^2.2",
+        "phpunit/phpunit": "^6.4",
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Framework\\": "src/Framework",
-            "App\\": "src/App",
+            "App\\": "src/App/",
+            "Framework\\": "src/Framework/",
+            "Infrastructure\\": "src/Infrastructure/",
             "Tests\\": "tests/"
         }
     },
     "scripts": {
-        "serve": "php -S 0.0.0.0:8000 -t public public/index.php",
-        "test": "phpunit --colors=always"
+        "serve": "php -S 0.0.0.0:8080 -t public",
+        "test": "phpunit --colors=always",
+        "development-enable": "cp config/autoload/development.local.php.dist config/autoload/development.local.php",
+        "development-disable": "rm config/autoload/development.local.php"
     }
 }

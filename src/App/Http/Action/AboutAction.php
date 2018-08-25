@@ -1,12 +1,24 @@
 <?php
+
 namespace App\Http\Action;
 
-use Zend\Diactoros\Response\JsonResponse;
+use Framework\Template\TemplateRenderer;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Diactoros\Response\HtmlResponse;
 
-class AboutAction
+class AboutAction implements RequestHandlerInterface
 {
-    public function __invoke()
+    private $template;
+
+    public function __construct(TemplateRenderer $template)
     {
-        return new JsonResponse('I\'m a simple site');
+        $this->template = $template;
+    }
+
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new HtmlResponse($this->template->render('app/about'));
     }
 }
